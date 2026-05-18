@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BFK – Badsjöföreningen Karparna</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --water: #2a6b7c;
+    --water-light: #4a9bb0;
+    --water-pale: #e8f4f7;
+    --moss: #4a6741;
+    --moss-light: #7a9e73;
+    --sand: #f5f0e8;
+    --bark: #3d2e1e;
+    --text: #2c2c2a;
+    --text-muted: #6b6b68;
+    --white: #ffffff;
+    --border: rgba(42,107,124,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  .nav-logo img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+  .nav-links {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links > li { position: relative; }
+  .nav-links a {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .nav-links a:hover { color: var(--water); }
+
+  /* Dropdown */
+  .nav-links .has-dropdown > a::after {
+    content: ' ▾';
+    font-size: 0.65rem;
+    opacity: 0.5;
+  }
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    background: white;
+    border: 1px solid var(--border);
+    min-width: 210px;
+    z-index: 200;
+    padding: 0.5rem 0;
+  }
+  .dropdown a {
+    display: block;
+    padding: 0.55rem 1.25rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .dropdown a:hover { background: var(--water-pale); color: var(--water); }
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown { display: block; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, #1a4a56 0%, #2a6b7c 40%, #3d8a72 100%);
+    color: white;
+    padding: 7rem 2rem 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q15 20 30 30 Q45 40 60 30' stroke='rgba(255,255,255,0.06)' fill='none' stroke-width='1'/%3E%3Cpath d='M0 45 Q15 35 30 45 Q45 55 60 45' stroke='rgba(255,255,255,0.04)' fill='none' stroke-width='1'/%3E%3C/svg%3E") repeat;
+    background-size: 60px 60px;
+  }
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.75);
+  }
+  .hero p {
+    font-size: 1.05rem;
+    max-width: 560px;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: white;
+    color: var(--water);
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--sand); }
+  .btn-outline {
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 0.75rem 1.75rem;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--bark);
+    color: white;
+    padding: 1.5rem 2rem;
+  }
+  .stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+
+  /* SECTION BASE */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--water);
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--bark);
+  }
+  .section-lead {
+    font-size: 1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    font-weight: 300;
+    margin-bottom: 3rem;
+    line-height: 1.8;
+  }
+
+  /* NEWS GRID */
+  .news-bg { background: var(--sand); }
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .news-card {
+    background: white;
+    padding: 2rem;
+    border-top: 3px solid var(--water-light);
+    position: relative;
+  }
+  .news-date {
+    font-size: 0.75rem;
+    color: var(--water);
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .news-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+    color: var(--bark);
+  }
+  .news-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; }
+
+  /* ABOUT / SPLIT */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) { .split { grid-template-columns: 1fr; gap: 2rem; } }
+  .lake-illustration {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(180deg, #b8dce8 0%, #4a9bb0 40%, #2a6b7c 100%);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .lake-illustration::before {
+    content: '';
+    position: absolute;
+    bottom: 30%;
+    left: 0; right: 0;
+    height: 40%;
+    background: rgba(255,255,255,0.08);
+    clip-path: ellipse(60% 50% at 50% 50%);
+  }
+  .lake-trees {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 0 1rem;
+  }
+  .tree { width: 0; height: 0; border-left: solid transparent; border-right: solid transparent; border-bottom: solid var(--moss); }
+
+  /* ACTIVITIES */
+  .activities-bg { background: var(--water-pale); }
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+  .activity-card {
+    background: white;
+    padding: 1.75rem;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+  .activity-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--water-pale);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  .activity-card h3 {
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+    color: var(--bark);
+  }
+  .activity-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* SPONSORS */
+  .sponsors-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+  .sponsor-tag {
+    background: var(--sand);
+    padding: 0.5rem 1.2rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  /* MEMBERSHIP */
+  .membership-bg {
+    background: linear-gradient(135deg, var(--moss) 0%, var(--water) 100%);
+    color: white;
+  }
+  .membership-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) { .membership-inner { grid-template-columns: 1fr; } }
+  .membership-bg .section-title { color: white; }
+  .membership-bg .section-tag { color: rgba(255,255,255,0.6); }
+  .membership-bg .section-lead { color: rgba(255,255,255,0.75); max-width: 100%; margin-bottom: 2rem; }
+  .membership-details {
+    background: rgba(255,255,255,0.1);
+    padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.9rem;
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row span:first-child { color: rgba(255,255,255,0.65); }
+  .detail-row span:last-child { font-weight: 500; color: white; }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .contact-card {
+    padding: 2rem;
+    border: 1px solid var(--border);
+  }
+  .contact-card h3 {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--water);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .contact-card p, .contact-card a {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    text-decoration: none;
+    display: block;
+  }
+  .contact-card a:hover { color: var(--water); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bark);
+    color: rgba(255,255,255,0.5);
+    padding: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+  footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+
+  /* MAP EMBED */
+  .map-frame {
+    width: 100%;
+    height: 300px;
+    border: none;
+    filter: saturate(0.7);
+  }
+
+  /* HISTORIK */
+  .historik-bg { background: var(--white); }
+  .historik-list { display: flex; flex-direction: column; gap: 0; }
+  .historik-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .historik-item:last-child { border-bottom: none; }
+  .historik-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--water-light);
+    padding-top: 0.15rem;
+    text-align: right;
+    padding-right: 2rem;
+    border-right: 2px solid var(--border);
+  }
+  .historik-content { padding-left: 0.5rem; }
+  .historik-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bark);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  .historik-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* STADGAR */
+  .stadgar-bg { background: var(--sand); }
+  .stadgar-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  @media (max-width: 768px) { .stadgar-grid { grid-template-columns: 1fr; gap: 2rem; } }
+  .stadgar-toc { position: sticky; top: 80px; }
+  .stadgar-toc h4 {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--water);
+    margin-bottom: 1rem;
+  }
+  .stadgar-toc a {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 0.3rem 0;
+    border-left: 2px solid transparent;
+    padding-left: 0.75rem;
+    transition: all 0.15s;
+  }
+  .stadgar-toc a:hover { color: var(--water); border-left-color: var(--water-light); }
+  .stadgar-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--bark);
+    margin: 2rem 0 0.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .stadgar-body h3:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+  .stadgar-body p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--water-light);
+    margin-bottom: 2rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="https://www.karparna.com/sites/karparna.com/files/karparna_300x49.gif" alt="BFK – Badsjöföreningen Karparna">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#nyheter">Nyheter</a></li>
+      <li class="has-dropdown">
+        <a href="#om">Om BFK</a>
+        <div class="dropdown">
+          <a href="#om">Om föreningen</a>
+          <a href="#bli-medlem">Bli medlem</a>
+          <a href="#stadgar">Stadgar</a>
+        </div>
+      </li>
+      <li><a href="#historik">Historik</a></li>
+      <li><a href="#aktiviteter">Aktiviteter</a></li>
+      <li class="has-dropdown">
+        <a href="#aktiviteter">Sjövård</a>
+        <div class="dropdown">
+          <a href="#aktiviteter">Sjövårdsarbetet</a>
+          <a href="#nyheter">Sjövård 2024</a>
+        </div>
+      </li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Bagarsjön · Lännersta · Nacka</span>
+    <h1>Vi värnar om <em>Bagarsjön</em> – sedan 1970-talet</h1>
+    <p>Badsjöföreningen Karparna arbetar för en levande bad- och fiskesjö för alla som bor och vistas runt Bagarsjön i Saltsjö-Boo.</p>
+    <div class="hero-btns">
+      <a href="#bli-medlem" class="btn-primary">Bli medlem</a>
+      <a href="#om" class="btn-outline">Läs mer om BFK</a>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div>
+      <span class="stat-num">1970</span>
+      <span class="stat-label">Grundad</span>
+    </div>
+    <div>
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Aktiva år</span>
+    </div>
+    <div>
+      <span class="stat-num">1 500</span>
+      <span class="stat-label">Hushåll i närheten</span>
+    </div>
+    <div>
+      <span class="stat-num">3</span>
+      <span class="stat-label">Sjövårdsprojekt 2024</span>
+    </div>
+  </div>
+</div>
+
+<!-- NYHETER -->
+<section class="news-bg" id="nyheter">
+  <div class="section-inner">
+    <p class="section-tag">Aktuellt</p>
+    <h2 class="section-title">Senaste nytt</h2>
+    <div class="divider"></div>
+    <div class="news-grid">
+      <div class="news-card">
+        <p class="news-date">2024</p>
+        <h3>Sjövård 2024 – ett aktivt år</h3>
+        <p>Tillsammans med kommunen har BFK genomfört tre större sjövårdsprojekt: aluminiumfällning, restaurering av utloppet och återställning av våtmark vid pumpstationen.</p>
+      </div>
+      <div class="news-card">
+        <p class="news-date">2024</p>
+        <h3>Verksamhetsberättelse 2023 publicerad</h3>
+        <p>Årets verksamhetsberättelse finns nu tillgänglig. Den sammanfattar föreningens arbete och insatser under det gångna året.</p>
+      </div>
+      <div class="news-card">
+        <p class="news-date">Varje höst</p>
+        <h3>Badsjöfestivalen – en tradition sedan 1979</h3>
+        <p>Varje höst, första lördagen efter skolstart, anordnar vi vår omtyckta festival vid sjön. Musik, aktiviteter och gemenskap för hela familjen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OM BFK -->
+<section id="om">
+  <div class="section-inner">
+    <div class="split">
+      <div>
+        <p class="section-tag">Om föreningen</p>
+        <h2 class="section-title">En sjö som vi räddade tillsammans</h2>
+        <div class="divider"></div>
+        <p style="color: var(--text-muted); font-weight: 300; line-height: 1.9; margin-bottom: 1.25rem; font-size: 0.97rem;">
+          Det hela började på 1970-talet när de boende runt Bagarsjön i Lännersta, Saltsjö-Boo, gick samman för att rädda sin igenväxande bad- och fiskesjö. Det arbetet pågår än idag.
+        </p>
+        <p style="color: var(--text-muted); font-weight: 300; line-height: 1.9; margin-bottom: 1.25rem; font-size: 0.97rem;">
+          BFK bedriver kontinuerlig sjövård, arrangerar den populära Badsjöfestivalen och delar varje år ut miljöstipendier för att uppmuntra engagemang för sjön och dess omgivning.
+        </p>
+        <a href="#bli-medlem" class="btn-primary" style="background: var(--water); color: white; display: inline-block; margin-top: 0.5rem;">Gå med i föreningen</a>
+      </div>
+      <div class="lake-illustration" aria-hidden="true">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#b8dce8"/>
+              <stop offset="100%" stop-color="#4a9bb0"/>
+            </linearGradient>
+            <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#2a6b7c"/>
+              <stop offset="100%" stop-color="#1a4a56"/>
+            </linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#sky)"/>
+          <ellipse cx="200" cy="120" rx="180" ry="90" fill="url(#water)" opacity="0.6"/>
+          <ellipse cx="200" cy="140" rx="160" ry="75" fill="url(#water)" opacity="0.8"/>
+          <!-- Trees left -->
+          <polygon points="40,240 55,180 70,240" fill="#3d6b35"/>
+          <polygon points="30,240 48,170 66,240" fill="#4a7d40"/>
+          <polygon points="60,240 78,185 96,240" fill="#3d6b35"/>
+          <!-- Trees right -->
+          <polygon points="310,240 325,175 340,240" fill="#3d6b35"/>
+          <polygon points="330,240 350,180 370,240" fill="#4a7d40"/>
+          <polygon points="350,240 368,185 386,240" fill="#3d6b35"/>
+          <!-- Ground -->
+          <rect x="0" y="238" width="400" height="62" fill="#4a6741" opacity="0.9"/>
+          <!-- Reflections -->
+          <ellipse cx="200" cy="148" rx="80" ry="8" fill="rgba(255,255,255,0.1)"/>
+          <ellipse cx="160" cy="160" rx="40" ry="4" fill="rgba(255,255,255,0.07)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AKTIVITETER -->
+<section class="activities-bg" id="aktiviteter">
+  <div class="section-inner">
+    <p class="section-tag">Vad vi gör</p>
+    <h2 class="section-title">Återkommande aktiviteter</h2>
+    <div class="divider"></div>
+    <div class="activities-grid">
+      <div class="activity-card">
+        <div class="activity-icon">🎉</div>
+        <h3>Badsjöfestivalen</h3>
+        <p>Varje höst, första lördagen efter skolstart. Musik på scen och aktiviteter vid sjön sedan 1979.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">⛸️</div>
+        <h3>Skridskor på vintern</h3>
+        <p>Vi plogar en långfärdsskridskobana och spelplaner under vintertid när isen är säker.</p>
+      </div>
+
+      <div class="activity-card">
+        <div class="activity-icon">🌿</div>
+        <h3>Vårens badplatsstädning</h3>
+        <p>Varje maj samlas vi för att städa och förbereda badplatsen inför sommarsäsongen.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">⛳</div>
+        <h3>Badsjögolfen</h3>
+        <p>I slutet av sommaren tävlar deltagare om äran i Badsjögolfen på Nacka GK:s 18-hålsbana.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">💧</div>
+        <h3>Sjövård hela året</h3>
+        <p>Löpande insatser för att bevara och förbättra Bagarsjöns vattenkvalitet och ekosystem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLI MEDLEM -->
+<section class="membership-bg" id="bli-medlem" style="padding: 5rem 2rem;">
+  <div class="membership-inner" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1100px;margin:0 auto;">
+    <div>
+      <p class="section-tag">Engagera dig</p>
+      <h2 class="section-title">Bli medlem i BFK</h2>
+      <div class="divider" style="background: rgba(255,255,255,0.4);"></div>
+      <p class="section-lead">Medlemskapet kostar <strong style="color:white;">185 kr per familj och kalenderår</strong> och stödjer arbetet med att bevara Bagarsjön som en levande bad- och fiskesjö.</p>
+      <p style="color:rgba(255,255,255,0.75);font-size:0.9rem;font-weight:300;line-height:1.8;margin-bottom:2rem;">Skicka ett e-postmeddelande med dina uppgifter till oss, så hör kassör Peter Orthén av sig.</p>
+      <a href="mailto:BFK.Karparna@gmail.com?subject=Jag vill bli medlem i BFK" class="btn-primary">Skicka ansökan via e-post</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1rem;">
+      <div class="membership-details">
+        <p style="font-size:0.72rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:1rem;">Uppgifter för vuxna</p>
+        <div class="detail-row"><span>För- och efternamn</span></div>
+        <div class="detail-row"><span>Födelseår</span></div>
+        <div class="detail-row"><span>Postadress</span></div>
+        <div class="detail-row"><span>Postnummer och ort</span></div>
+        <div class="detail-row"><span>Telefon (hem och mobil)</span></div>
+        <div class="detail-row" style="border-bottom:none;"><span>E-postadress</span></div>
+      </div>
+      <div class="membership-details">
+        <p style="font-size:0.72rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:1rem;">Uppgifter för barn</p>
+        <div class="detail-row"><span>För- och efternamn</span></div>
+        <div class="detail-row" style="border-bottom:none;"><span>Födelseår</span></div>
+      </div>
+      <div class="membership-details">
+        <p style="font-size:0.72rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:1rem;">Betalning</p>
+        <div class="detail-row">
+          <span>Bankgiro</span>
+          <span>5073-8921</span>
+        </div>
+        <div class="detail-row" style="border-bottom:none;">
+          <span>Årsavgift</span>
+          <span>185 kr / familj</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORER -->
+<section>
+  <div class="section-inner">
+    <p class="section-tag">Tack till</p>
+    <h2 class="section-title">Miljösponsorer</h2>
+    <div class="divider"></div>
+    <p class="section-lead">Dessa företag i Nacka stödjer vårt miljöarbete med Bagarsjön och vår folder som distribueras till ca 1 500 hushåll.</p>
+    <div class="sponsors-grid">
+      <span class="sponsor-tag">Pallpoolen Stockholm</span>
+      <span class="sponsor-tag">SvenskFast Nacka</span>
+      <span class="sponsor-tag">Schneider & Co</span>
+      <span class="sponsor-tag">Nacka Bryggeri</span>
+      <span class="sponsor-tag">Procensor AB</span>
+      <span class="sponsor-tag">Nacka GK</span>
+    </div>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 1.5rem;">Vill ditt företag bli miljösponsor? <a href="mailto:BFK.Karparna@gmail.com" style="color: var(--water);">Hör av dig till oss.</a></p>
+  </div>
+</section>
+
+<!-- KONTAKT + KARTA -->
+<section style="background: var(--sand);" id="kontakt">
+  <div class="section-inner">
+    <p class="section-tag">Hitta oss</p>
+    <h2 class="section-title">Kontakt</h2>
+    <div class="divider"></div>
+    <div class="contact-grid" style="margin-bottom: 2.5rem;">
+      <div class="contact-card">
+        <h3>E-post</h3>
+        <a href="mailto:BFK.Karparna@gmail.com">BFK.Karparna@gmail.com</a>
+      </div>
+      <div class="contact-card">
+        <h3>Postadress</h3>
+        <p>Badsjöföreningen Karparna<br>Badsjöstigen 26<br>132 45 Saltsjö-Boo</p>
+      </div>
+      <div class="contact-card">
+        <h3>Bagarsjöns badplats</h3>
+        <p>Liljekonvaljens väg 1<br>Lännersta, Saltsjö-Boo<br>Nacka kommun</p>
+      </div>
+    </div>
+    <iframe class="map-frame"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=18.17,59.30,18.23,59.34&layer=mapnik&marker=59.315,18.2"
+      title="Karta över Bagarsjön"></iframe>
+  </div>
+</section>
+
+<!-- HISTORIK -->
+<section class="historik-bg" id="historik">
+  <div class="section-inner">
+    <p class="section-tag">Bakgrund</p>
+    <h2 class="section-title">Historik</h2>
+    <div class="divider"></div>
+    <p class="section-lead">Femtio år av engagemang för Bagarsjön – från räddningsinsats till löpande sjövård.</p>
+    <div class="historik-list">
+      <div class="historik-item">
+        <div class="historik-year">2018</div>
+        <div class="historik-content">
+          <h3>Signalkräftorna dör ut</h3>
+          <p>Sedan hösten 2012 har föreningen inte haft kräftprovfiske. Efter analyser med fiskerikonsulenten konstaterades att kräftorna i Bagarsjön inte förökar sig. Signalkräftorna dör ut – samma utveckling som i många sjöar i Sverige och Finland. Sedan 2016 har sjön haft en överrepresentation av grönalg, som bildar gröna moln och en skummig yta som är svår att avlägsna manuellt.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2015</div>
+        <div class="historik-content">
+          <h3>Fettrikt miljöfarligt vatten hotar sjön</h3>
+          <p>Hösten 2015 rann fettrikt vatten i stora mängder ut i fördröjningsdammen nedanför förskolan. Tack vare snabbt ingripande från BFK och Nacka kommun hindrades föroreningarna från att nå sjön. Simskolan, kräftfisket och festivalen ställdes in detta år.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2012</div>
+        <div class="historik-content">
+          <h3>Syresättning, algbestånd och god skridskois</h3>
+          <p>Sjön syresattes hela 2012. Sjövårdsgruppen hade kontinuerliga överläggningar med Nacka kommun och limnolog Sten Åke Carlsson. Kommunen renoverade bryggorna vid badet. Festivalen återupptogs med en ny grupp festivalansvariga efter att ha ställts in 2011.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2009</div>
+        <div class="historik-content">
+          <h3>U-båten mitt i sjön</h3>
+          <p>I samråd med Nacka kommun testades en ny syresättningsmetod – en undervattensanläggning med sex uppstickande rör som blåser in luft från en kompressor vid kommunens pumpstation. Syftet var att öka syrehalten i det syrefattiga bottenvattnet.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2008</div>
+        <div class="historik-content">
+          <h3>Syresättning och klotterbekämpning</h3>
+          <p>BFK deltog i ett kommunalt försöksprojekt för syresättning av bottenvattnet. Föreningen initierade även en klotterbekämpningskampanj med stöd från kommun, skolor och polis. En mer parkliknande miljö skapades vid badplatsen längs Liljekonvaljens väg.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2007</div>
+        <div class="historik-content">
+          <h3>Fördröjningsdammen byggs</h3>
+          <p>Boo områdesnämnd anslåg en halv miljon kronor till BFK:s sjövårdsarbete. Kommunen projekterade fördröjningsdammen i samråd med sjövårdsgruppen. Dammen stod klar 2008 och är en av flera åtgärder för att reducera externa föroreningar till sjön.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2006</div>
+        <div class="historik-content">
+          <h3>Ny badbod invigd och syrebrist med fiskdöd</h3>
+          <p>En ny badbod invigdes under högtidliga former. BFK bekostade rivningen av de gamla omklädningshytterna. Tidigare samma år uppstod allvarlig syrebrist i sjön. Med hjälp av pumpar steg syrehalten inom tre veckor och fiskarna överlevde – de flesta kräftorna dog däremot.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2004</div>
+        <div class="historik-content">
+          <h3>Ett katastrofår för sjövården</h3>
+          <p>En överkoppling på en privat fastighet ledde till att avloppsvatten från hela området rann ut i Bagarsjön istället för till Käppala reningsverk. Kombinerat med kraftig algtillväxt och svåra isförhållanden resulterade det i allvarlig syrebrist och stora förluster i kräftbeståndet.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">2003</div>
+        <div class="historik-content">
+          <h3>Badsjöfestivalens 25-årsjubileum</h3>
+          <p>Den 23 augusti firades festivalen 25 år med kräftskiva och dans på stranden. Fyrverkeri avfyrades från flotten. BFK och Nacka kommun utredde gemensamt ett reningsprojekt för dagvattnet nedanför barnstugan.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">1997</div>
+        <div class="historik-content">
+          <h3>Bottenvattenfällning och det första Badsjöloppet</h3>
+          <p>En ny metod för att minska internbelastningen av fosfor – kemisk fällning i bottenvattnet – introducerades. Kommunens utredningar visade att detta i kombination med traditionellt sjövårdsarbete skulle ge en friskare sjö. Det första Badsjöloppet på 7 km genomfördes.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">1996</div>
+        <div class="historik-content">
+          <h3>Bagarsjön bland landets mest övergödda sjöar</h3>
+          <p>Bagarsjön kvalade in bland landets hundra mest övergödda och syrefattiga sjöar – ett tydligt tecken på hur allvarligt läget var och varför BFK:s sjövårdsarbete är så viktigt.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">1979</div>
+        <div class="historik-content">
+          <h3>Badsjöfestivalen startar</h3>
+          <p>Den första Badsjöfestivalen anordnas vid Bagarsjön – en tradition som lever kvar än idag, varje höst första lördagen efter skolstart.</p>
+        </div>
+      </div>
+      <div class="historik-item">
+        <div class="historik-year">1970</div>
+        <div class="historik-content">
+          <h3>BFK grundas</h3>
+          <p>De boende runt Bagarsjön i Lännersta, Saltsjö-Boo, går samman för att rädda sin igenväxande bad- och fiskesjö. Badsjöföreningen Karparna bildas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STADGAR -->
+<section class="stadgar-bg" id="stadgar">
+  <div class="section-inner">
+    <p class="section-tag">Föreningens regler</p>
+    <h2 class="section-title">Stadgar</h2>
+    <div class="divider"></div>
+    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:3rem;">Fastställda 2011-03-12</p>
+    <div class="stadgar-grid">
+      <div class="stadgar-toc">
+        <h4>Innehåll</h4>
+        <a href="#s1">§ 1 Syfte</a>
+        <a href="#s2">§ 2 Medlemskap</a>
+        <a href="#s3">§ 3 Utträde</a>
+        <a href="#s4">§ 4 Återinträde</a>
+        <a href="#s5">§ 5 Avgifter</a>
+        <a href="#s6">§ 6 Val</a>
+        <a href="#s7">§ 7 Kommittéer</a>
+        <a href="#s8">§ 8 Styrelsens uppgifter</a>
+        <a href="#s9">§ 9 Revisorerna</a>
+        <a href="#s10">§ 10 Medlemsmöten</a>
+        <a href="#s11">§ 11 Rösträtt</a>
+        <a href="#s12">§ 12 Badsjöfestivalen</a>
+        <a href="#s13">§ 13 Behållning</a>
+        <a href="#s14">§ 14 Medlems ansvar</a>
+        <a href="#s15">§ 15 Räkenskapsår</a>
+        <a href="#s16">§ 16 Stadgeändring</a>
+        <a href="#s17">§ 17 Upplösning</a>
+      </div>
+      <div class="stadgar-body">
+        <h3 id="s1">§ 1 Syfte</h3>
+        <p>BFK:s ändamål är att främja intresset för sjövårdsinsatser i Bagarsjön i Lännersta och medverka till att förbättra sjöns vattenkvalitet genom olika arbetsinsatser.</p>
+        <p>Föreningen syftar även till att skapa och utveckla sammanhållning och trivsel bland de kringboende runt Bagarsjön, bl.a. genom att svara för att genomföra den årliga Badsjöfestivalen och andra gemensamma aktiviteter i anslutning till Bagarsjön.</p>
+        <p>BFK underhåller festivalplatsen utöver skötseln av själva badplatsen som kommunen ansvarar för, samt stödjer strängt lokala aktiviteter av gemensamt intresse, exempelvis simundervisning, skridskobanor på sjön och föräldravandringar vid badplatsen.</p>
+
+        <h3 id="s2">§ 2 Medlemskap</h3>
+        <p>Medlemskap beviljas alla som betalar medlemsavgiften (ett medlemskap per familj).</p>
+
+        <h3 id="s3">§ 3 Utträde</h3>
+        <p>Medlem som önskar utträda ur BFK skall göra anmälan därom till styrelsen. Medlem som efter gjord påminnelse inte inom tre månader betalat fastställd medlemsavgift har förverkat sin medlemsrätt och utesluts automatiskt. Styrelsen kan dock efter prövning medge undantag härifrån.</p>
+        <p>Medlem som kränker BFK:s anseende, motverkar dess syfte eller begår brott mot dessa stadgar, kan uteslutas efter beslut av medlemsmöte. Utträdd eller utesluten medlem förlorar alla sina rättigheter i BFK.</p>
+
+        <h3 id="s4">§ 4 Återinträde</h3>
+        <p>Medlem som uteslutits ur BFK kan, om det finns vägande skäl därtill, beviljas återinträde om förutsättningen i § 2 är uppfylld.</p>
+
+        <h3 id="s5">§ 5 Avgifter</h3>
+        <p>Medlem betalar årsavgift till BFK. Storleken på årsavgiften fastställs för ett år i sänder på BFK:s årsmöte, liksom storleken på andra eventuella avgifter eller utdebiteringar. Tidpunkten för inbetalning fastställs också på årsmötet.</p>
+
+        <h3 id="s6">§ 6 Val</h3>
+        <p>BFK:s styrelse består av fem ledamöter: ordförande och fyra ledamöter. Styrelsens ledamöter väljs var för sig vid årsmötet för en tid av två år och avgår växelvis. Posten som ordförande tillsätts direkt av årsmötet, medan övriga poster fördelas inom styrelsen i enlighet med § 8.</p>
+        <p>För granskning av BFK:s förvaltning utses två revisorer för en tid av två år, växelvis avgående. Vid årsmötet utses även en valberedning med två ledamöter på två år, växelvis avgående.</p>
+
+        <h3 id="s7">§ 7 Kommittéer och funktionsansvariga</h3>
+        <p>Styrelsen utser alltefter behov olika kommittéer och funktionärer, t.ex. festivalkommitté, sjövårdskommitté och underhållskommitté. Funktionsansvariga för Badsjöfestivalen respektive sjövården adjungeras automatiskt till styrelsen. Kommittéer och funktionärer bedriver sin verksamhet i samråd med styrelsen.</p>
+
+        <h3 id="s8">§ 8 Styrelsens uppgifter</h3>
+        <p>Styrelsen är BFK:s verkställande funktion. Den förvaltar BFK:s tillgångar och ekonomi, behandlar frågor hänskjutna av medlemsmöte, leder verksamheten i dess helhet och tillser att stadgarna efterlevs. Styrelsen skall varje år framlägga en verksamhetsberättelse för föregående år.</p>
+        <p>Styrelsen är beslutsmässig då minst fyra av ledamöterna är närvarande. Avgående styrelse skall senast inom en vecka efter årsmötet överlämna bokföring, handlingar och tillhörigheter till den nyvalda styrelsen.</p>
+
+        <h3 id="s9">§ 9 Revisorernas uppgifter</h3>
+        <p>Revisorerna granskar styrelsens förvaltning och BFK:s räkenskaper. Vid årsmötet skall revisorerna avge en undertecknad berättelse över granskningen, vari ansvarsfrihet för styrelsen till- eller avstyrks. Revisorerna skall löpande hållas underrättade om styrelsens beslut via protokoll.</p>
+
+        <h3 id="s10">§ 10 Medlemsmöten</h3>
+        <p>BFK håller minst ett medlemsmöte per år, vilket är årsmötet. Det skall hållas under perioden januari–mars. Extra möte skall hållas då styrelsen anser behov föreligger, eller då minst en femtedel av medlemmarna skriftligen begär det. Extra möte skall hållas inom tre veckor efter inlämnad anhållan.</p>
+        <p>Kallelse sker skriftligen minst tio dagar i förväg med dagordning bifogad. Vid årsmötet skall styrelseberättelse, revisionsberättelse, beslut om ansvarsfrihet, val samt fastställande av avgifter förekomma.</p>
+
+        <h3 id="s11">§ 11 Medlems rösträtt</h3>
+        <p>Medlem som betalat fastställda avgifter är röstberättigad med en röst vid BFK:s möten.</p>
+
+        <h3 id="s12">§ 12 Badsjöfestivalen</h3>
+        <p>BFK anordnar normalt en gång per år en Badsjöfestival. Syftet är dels att stärka sammanhållningen bland de boende, dels att skapa ett ekonomiskt överskott som används i enlighet med BFK:s syfte.</p>
+
+        <h3 id="s13">§ 13 BFK:s behållning</h3>
+        <p>BFK:s kapitalbehållning och avkastning skall användas till åtgärder för att förbättra Bagarsjöns vattenkvalitet och/eller öka sjöns motståndskraft mot miljöpåverkan. Medlen får inte användas för anläggningar som kommunala myndigheter normalt bekostar, om de inte direkt syftar till att förbättra vattenkvaliteten.</p>
+        <p>Om BFK:s behållning under en femårsperiod inte använts för ovan angivet ändamål, skall frågan om eventuell ändring underställas nästkommande årsmöte. Vid upplösning av BFK överlämnas resterande behållning till Nacka kommun för insatser i enlighet med BFK:s syfte.</p>
+
+        <h3 id="s14">§ 14 Medlems ansvar</h3>
+        <p>Medlem förutsätts hjälpa till i festivalarbetet och i andra aktiviteter som kan bli aktuella, exempelvis nattvandring vid badet och skördearbete.</p>
+
+        <h3 id="s15">§ 15 Räkenskapsår</h3>
+        <p>Räkenskapsår är 1 januari – 31 december.</p>
+
+        <h3 id="s16">§ 16 Ändring av stadgarna</h3>
+        <p>Ändring av dessa stadgar kan endast ske genom beslut på två på varandra följande medlemsmöten, varav ett skall vara årsmöte. Tvist angående tolkningen av stadgarna avgörs tillfälligtvis av styrelsen i samråd med revisorerna och upptas till behandling vid nästkommande medlemsmöte.</p>
+
+        <h3 id="s17">§ 17 BFK:s upplösning</h3>
+        <p>Badsjöföreningen Karparna kan inte upplösas med mindre än att nio tiondelar av hela medlemsantalet är ense därom. Beslut om upplösning fattas på två på varandra följande medlemsmöten, varav ett skall vara årsmöte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <p>© 2026 BFK – Badsjöföreningen Karparna &nbsp;·&nbsp; Org.nr 802406-0553 &nbsp;·&nbsp; <a href="mailto:BFK.Karparna@gmail.com">BFK.Karparna@gmail.com</a></p>
+</footer>
+
+</body>
+</html>
